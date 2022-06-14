@@ -24,8 +24,37 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
       - name: Setup FoundationDB
         uses: foundationdb-rs/foundationdb-actions-install@v2.0.0
         with:
           version: "7.0.0"
+
+      - name: whereis fdbserver
+        run: whereis fdbserver
+
+      - name: check so
+        run: file /usr/lib/libfdb_c.so
+
+      - name: check header
+        run: file /usr/include/foundationdb/fdb_c.h
+
+      - name: check options
+        run: file /usr/include/foundationdb/fdb_c_options.g.h
+
+      - name: check current path
+        run: pwd
+
+      - name: create ouput folder
+        run: mkdir out
+
+      - name: build
+        run: cd src && g++ -fpic -shared workload.cpp -o workload.so && cd ..
+
+      - name: run simulation
+        run: fdbserver -r simulation ./test_file.txt --trace-format json
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: traces.json
+          path: ./trace*

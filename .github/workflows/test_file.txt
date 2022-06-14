@@ -1,0 +1,5 @@
+testTitle=MyTest
+  testName=External
+  libraryName=wrap
+  workloadName=test.workloads.TestWorkload
+  libraryPath=/home/pierrez/workspace/others/rustincppso/poc3/lib
