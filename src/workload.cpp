@@ -8,6 +8,7 @@ class SimpleWorkload: public FDBWorkload {
     }
 	virtual bool init(FDBWorkloadContext* context) override {
         std::cout << "SimpleWorkload::init()\n";
+        context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
         return true;
     }
 	virtual void setup(FDBDatabase* db, GenericPromise<bool> done) override {
@@ -37,6 +38,6 @@ class SimpleWorkloadFactory: public FDBWorkloadFactory {
 
 extern "C" FDBWorkloadFactory* workloadFactory(FDBLogger* logger) {
     std::cout << "workloadFactory()\n";
-    //logger->trace(FDBSeverity::WarnAlways, "TEST_LOG", {});
+    logger->trace(FDBSeverity::WarnAlways, "FDBLogger::trace()", {});
     return new SimpleWorkloadFactory();
 }
