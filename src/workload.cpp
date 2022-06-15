@@ -1,6 +1,6 @@
 #include <iostream>
 #include "ClientWorkload.h"
-#define FDB_API_VERSION 710
+#define FDB_API_VERSION 720
 #include "fdb_c.h"
 
 class SimpleWorkload: public FDBWorkload {
