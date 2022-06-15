@@ -52,12 +52,13 @@ jobs:
         run: make
 
       - name: help
-        fdbser:
-          run : fdbserver --help
-        g++:
-          run: g++ --version
-        lib:
-          run: file ./lib/libcppwl.so
+        jobs:
+          fdbser:
+            run : fdbserver --help
+          g++:
+            run: g++ --version
+          lib:
+            run: file ./lib/libcppwl.so
 
       - name: run simulation
         run: fdbserver -r simulation -f ./test_file.txt --trace-format json
