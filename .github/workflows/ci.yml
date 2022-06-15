@@ -36,11 +36,8 @@ jobs:
       - name: check so
         run: file /usr/lib/libfdb_c.so
 
-      - name: check header
-        run: file /usr/include/foundationdb/fdb_c.h
-
-      - name: check options
-        run: file /usr/include/foundationdb/fdb_c_options.g.h
+      - name: check headers
+        run: file /usr/include/foundationdb/*.h
 
       - name: check current path
         run: pwd
