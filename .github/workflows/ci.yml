@@ -49,7 +49,7 @@ jobs:
         run: mkdir out
 
       - name: build
-        run: cd src && g++ -fpic -shared workload.cpp -o workload.so && cd ..
+        run: make
 
       - name: run simulation
         run: fdbserver -r simulation ./test_file.txt --trace-format json

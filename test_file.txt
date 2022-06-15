@@ -1,0 +1,5 @@
+testTitle=MyTest
+  testName=External
+  libraryName=cppwl
+  workloadName=test.workloads.CppWorload
+  libraryPath=./lib
