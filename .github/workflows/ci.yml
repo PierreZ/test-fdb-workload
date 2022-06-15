@@ -52,7 +52,7 @@ jobs:
         run: make
 
       - name: run simulation
-        run: fdbserver -r simulation ./test_file.txt --trace-format json
+        run: fdbserver -r simulation -f ./test_file.txt --trace-format json
 
       - uses: actions/upload-artifact@v3
         with:
