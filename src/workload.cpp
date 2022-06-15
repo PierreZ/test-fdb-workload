@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ClientWorkload.h"
+#include "fdb_c.h"
 
 class SimpleWorkload: public FDBWorkload {
     virtual std::string description() const override {
@@ -8,11 +9,16 @@ class SimpleWorkload: public FDBWorkload {
     }
 	virtual bool init(FDBWorkloadContext* context) override {
         std::cout << "SimpleWorkload::init()\n";
-        context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
+        //context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
+        std::cout << "fdb_get_max_api_version() = " << fdb_get_max_api_version() << "\n";
+        std::cout << "fdb_get_client_version() = "  << fdb_get_client_version()  << "\n";
         return true;
     }
 	virtual void setup(FDBDatabase* db, GenericPromise<bool> done) override {
         std::cout << "SimpleWorkload::setup()\n";
+        FDBTransaction* trx = nullptr;
+        fdb_database_create_transaction(db, &trx);
+        std::cout << "fdb_database_create_transaction()\n";
         done.send(true);
     }
 	virtual void start(FDBDatabase* db, GenericPromise<bool> done) override {
@@ -38,6 +44,6 @@ class SimpleWorkloadFactory: public FDBWorkloadFactory {
 
 extern "C" FDBWorkloadFactory* workloadFactory(FDBLogger* logger) {
     std::cout << "workloadFactory()\n";
-    logger->trace(FDBSeverity::WarnAlways, "FDBLogger::trace()", {});
+    //logger->trace(FDBSeverity::WarnAlways, "FDBLogger::trace()", {});
     return new SimpleWorkloadFactory();
 }
