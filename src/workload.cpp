@@ -11,7 +11,7 @@ class SimpleWorkload: public FDBWorkload {
 	virtual bool init(FDBWorkloadContext* context) override {
         std::cout << "SimpleWorkload::init()\n";
         //context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
-        //std::cout << "fdb_get_max_api_version() = " << fdb_get_max_api_version() << "\n";
+        std::cout << "fdb_get_max_api_version() = " << fdb_get_max_api_version() << "\n";
         //std::cout << "fdb_get_client_version() = "  << fdb_get_client_version()  << "\n";
         return true;
     }
