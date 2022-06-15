@@ -57,6 +57,8 @@ jobs:
         run: g++ --version
       - name: check lib
         run: file ./lib/libcppwl.so
+      - name: check linkage
+        run: readelf -a ./lib/libcppwl.so | grep "(NEEDED)"
 
       - name: run simulation
         run: fdbserver -r simulation -f ./test_file.txt --trace-format json
