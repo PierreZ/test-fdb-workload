@@ -55,6 +55,7 @@ jobs:
         run: fdbserver -r simulation -f ./test_file.txt --trace_format json
 
       - uses: actions/upload-artifact@v3
+        if: always()
         with:
           name: traces.json
           path: ./trace*
