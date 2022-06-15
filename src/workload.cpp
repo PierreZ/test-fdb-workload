@@ -29,13 +29,14 @@ class SimpleWorkload: public FDBWorkload {
 };
 
 class SimpleWorkloadFactory: public FDBWorkloadFactory {
-    virtual std::shared_ptr<FDBWorkload> create(const std::string& name) {
+    virtual std::shared_ptr<FDBWorkload> create(const std::string& name) override {
         std::cout << "SimpleWorkloadFactory::create()\n";
         return std::make_shared<SimpleWorkload>();
     }
 };
 
-extern "C" FDBWorkloadFactory* workloadFactory() {
+extern "C" FDBWorkloadFactory* workloadFactory(FDBLogger* logger) {
     std::cout << "workloadFactory()\n";
+    //logger->trace(FDBSeverity::WarnAlways, "TEST_LOG", {});
     return new SimpleWorkloadFactory();
 }

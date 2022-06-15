@@ -51,11 +51,8 @@ jobs:
       - name: build
         run: make
 
-      - name: help
-        run: fdbserver --help
-
       - name: run simulation
-        run: fdbserver -r simulation -f ./test_file.txt
+        run: fdbserver -r simulation -f ./test_file.txt --trace_format json
 
       - uses: actions/upload-artifact@v3
         with:
