@@ -8,4 +8,4 @@ ALL = $(lib)
 
 $(lib): $(src)
 	mkdir -p $(libdir)
-	g++ -fpic -shared $< -o $@ - I $(fdbdir)
+	g++ -fpic -shared $< -o $@ -I $(fdbdir)
