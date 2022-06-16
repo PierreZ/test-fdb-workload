@@ -56,9 +56,10 @@ class SimpleWorkload: public FDBWorkload {
             const char* key = "foo";
             std::cout << "fdb_transaction_get()\n";
             FDBFuture* f = fdb_transaction_get(trx, (uint8_t*)key, 3, false);
-            //std::cout << "fdb_future_block_until_ready()\n";
-            //error = fdb_future_block_until_ready(f);
-            //handle_error(error);
+            std::cout << "\tfuture = " << f << "\n";
+            std::cout << "fdb_future_block_until_ready()\n";
+            error = fdb_future_block_until_ready(f);
+            handle_error(error);
             //fdb_bool_t out_present;
             //uint8_t const* out_value;
             //int out_value_length;
@@ -71,7 +72,7 @@ class SimpleWorkload: public FDBWorkload {
             //    std::cout << "\tout_value: " << out_value << "\n";
             //}
             //std::cout << "fdb_future_destroy()\n";
-            //fdb_future_destroy(f);
+            fdb_future_destroy(f);
         std::cout << "fdb_transaction_destroy()\n";
         fdb_transaction_destroy(trx);
         done.send(true);
