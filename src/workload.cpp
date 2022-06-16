@@ -54,8 +54,8 @@ class SimpleWorkload: public FDBWorkload {
         fdb_error_t error = fdb_database_create_transaction(db, &trx);
             handle_error(error);
             const char* key = "foo";
-            //std::cout << "fdb_transaction_get()\n";
-            //FDBFuture* f = fdb_transaction_get(trx, (uint8_t*)key, 3, false);
+            std::cout << "fdb_transaction_get()\n";
+            FDBFuture* f = fdb_transaction_get(trx, (uint8_t*)key, 3, false);
             //std::cout << "fdb_future_block_until_ready()\n";
             //error = fdb_future_block_until_ready(f);
             //handle_error(error);
