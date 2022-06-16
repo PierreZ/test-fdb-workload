@@ -101,6 +101,6 @@ extern "C" FDBWorkloadFactory* workloadFactory(FDBLogger* logger) {
         handle_error(error);
         initialized = true;
     }
-    //logger->trace(FDBSeverity::WarnAlways, "FDBLogger::trace()", {});
+    logger->trace(FDBSeverity::WarnAlways, "FDBLogger::trace()", {});
     return new SimpleWorkloadFactory();
 }
