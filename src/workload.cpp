@@ -85,7 +85,9 @@ class SimpleWorkload: public FDBWorkload {
 class SimpleWorkloadFactory: public FDBWorkloadFactory {
     virtual std::shared_ptr<FDBWorkload> create(const std::string& name) override {
         std::cout << "SimpleWorkloadFactory::create()\n";
-        return std::make_shared<SimpleWorkload>();
+        std::shared_ptr<FDBWorkload> workload = std::make_shared<SimpleWorkload>();
+        std::cout << "workload created\n";
+        return workload;
     }
 };
 
@@ -93,8 +95,8 @@ extern "C" FDBWorkloadFactory* workloadFactory(FDBLogger* logger) {
     std::cout << "workloadFactory()\n";
     static bool initialized = false;
     if (!initialized) {
-        std::cout << "fdb_select_api_version(710)\n";
-        fdb_error_t error = fdb_select_api_version(710);
+        std::cout << "fdb_select_api_version(" << FDB_API_VERSION << ")\n";
+        fdb_error_t error = fdb_select_api_version(FDB_API_VERSION);
         handle_error(error);
         initialized = true;
     }
