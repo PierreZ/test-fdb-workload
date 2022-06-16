@@ -65,3 +65,40 @@ jobs:
         with:
           name: traces.json
           path: ./trace*
+
+  # Building FDB
+  build-fdb:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: foundationdb/build:centos7-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: git clone
+        run: git clone https://github.com/apple/foundationdb.git
+        working-directory: /root
+
+      - name: git checkout
+        run: git checkout release-7.1
+        working-directory: /root/foundationdb
+
+      - name: mkdir build_output
+        run: mkdir build_output
+        working-directory: /root
+
+      - name: cmake
+        run: source /opt/rh/devtoolset-8/enable && source /opt/rh/rh-python38/enable && cmake -G Ninja ../foundationdb
+        working-directory: /root/build_output
+
+      - name: ninja targets
+        run: source /opt/rh/devtoolset-8/enable && source /opt/rh/rh-python38/enable && ninja -t targets all
+        working-directory: /root/build_output
+
+      - name: ninja targets
+        run: source /opt/rh/devtoolset-8/enable && source /opt/rh/rh-python38/enable && ninja -t targets all | grep workload
+        working-directory: /root/build_output
+
+      - name: ninja build c_workloads
+        run: source /opt/rh/devtoolset-8/enable && source /opt/rh/rh-python38/enable && ninja -v -j1 c_workloads
+        working-directory: /root/build_output
+
