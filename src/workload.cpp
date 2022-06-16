@@ -10,7 +10,7 @@ class SimpleWorkload: public FDBWorkload {
     }
 	virtual bool init(FDBWorkloadContext* context) override {
         std::cout << "SimpleWorkload::init()\n";
-        fdb_select_api_version(710);
+        std::cout << "fdb_select_api_version(710) = " << fdb_select_api_version(710) << "\n";
         //context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
         std::cout << "fdb_get_max_api_version() = " << fdb_get_max_api_version() << "\n";
         std::cout << "fdb_get_client_version() = "  << fdb_get_client_version()  << "\n";
@@ -18,17 +18,56 @@ class SimpleWorkload: public FDBWorkload {
     }
 	virtual void setup(FDBDatabase* db, GenericPromise<bool> done) override {
         std::cout << "SimpleWorkload::setup()\n";
-        FDBTransaction* trx = nullptr;
-        //fdb_database_create_transaction(db, &trx);
-        //std::cout << "fdb_database_create_transaction()\n";
         done.send(true);
     }
 	virtual void start(FDBDatabase* db, GenericPromise<bool> done) override {
         std::cout << "SimpleWorkload::start()\n";
+        FDBTransaction* trx = nullptr;
+        std::cout << "fdb_database_create_transaction()\n";
+        fdb_error_t error = fdb_database_create_transaction(db, &trx);
+            std::cout << "\terror = " << error << "\n";
+            const char* key = "foo";
+            const char* val = "bar";
+            std::cout << "fdb_transaction_set()\n";
+            fdb_transaction_set(trx, (uint8_t*)key, 3, (uint8_t*)val, 3);
+            std::cout << "fdb_transaction_commit()\n";
+            FDBFuture* f = fdb_transaction_commit(trx);
+            std::cout << "fdb_future_block_until_ready()\n";
+            error = fdb_future_block_until_ready(f);
+            std::cout << "\terror = " << error << "\n";
+            std::cout << "fdb_future_destroy()\n";
+            fdb_future_destroy(f);
+        std::cout << "fdb_transaction_destroy()\n";
+        fdb_transaction_destroy(trx);
         done.send(true);
     }
 	virtual void check(FDBDatabase* db, GenericPromise<bool> done) override {
         std::cout << "SimpleWorkload::check()\n";
+        FDBTransaction* trx = nullptr;
+        std::cout << "fdb_database_create_transaction()";
+        fdb_error_t error = fdb_database_create_transaction(db, &trx);
+            std::cout << "\terror = " << error << "\n";
+            const char* key = "foo";
+            std::cout << "fdb_transaction_get()\n";
+            FDBFuture* f = fdb_transaction_get(trx, (uint8_t*)key, 3, false);
+            std::cout << "fdb_future_block_until_ready()\n";
+            error = fdb_future_block_until_ready(f);
+            std::cout << "\terror = " << error << "\n";
+            fdb_bool_t out_present;
+            uint8_t const* out_value;
+            int out_value_length;
+            std::cout << "fdb_future_get_value()\n";
+            error = fdb_future_get_value(f, &out_present, &out_value, &out_value_length);
+            std::cout << "\terror = " << error << "\n";
+            std::cout << "\tout_present: " << out_present << "\n";
+            if (out_present) {
+                std::cout << "\tout_value_length: " << out_value_length << "\n";
+                std::cout << "\tout_value: " << out_value << "\n";
+            }
+            std::cout << "fdb_future_destroy()\n";
+            fdb_future_destroy(f);
+        std::cout << "fdb_transaction_destroy()\n";
+        fdb_transaction_destroy(trx);
         done.send(true);
     }
 	virtual void getMetrics(std::vector<FDBPerfMetric>& out) const override {
