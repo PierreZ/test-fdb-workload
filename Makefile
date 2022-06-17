@@ -3,7 +3,7 @@ libdir = lib/
 fdbdir = /usr/include/foundationdb/
 
 libs = -lfdb_c -lm -lpthread -lrt
-opts = -fpic -shared -std=c++17
+opts = -O3 -fPIC -shared -fno-omit-frame-pointer -std=gnu++17 -static-libstdc++ -static-libgcc -mavx
 
 src = $(srcdir)workload.cpp
 lib = $(libdir)libcppwl.so

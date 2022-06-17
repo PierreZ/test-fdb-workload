@@ -10,16 +10,11 @@ class SimpleWorkload: public FDBWorkload {
     }
 	virtual bool init(FDBWorkloadContext* context) override {
         std::cout << "SimpleWorkload::init()\n";
-        //context->trace(FDBSeverity::WarnAlways, "FDBWorkloadContext::trace()", {});
-        std::cout << "fdb_get_max_api_version() = " << fdb_get_max_api_version() << "\n";
-        std::cout << "fdb_get_client_version() = "  << fdb_get_client_version()  << "\n";
+        context->trace(FDBSeverity::Info, "Hello from init", {});
         return true;
     }
 	virtual void setup(FDBDatabase* db, GenericPromise<bool> done) override {
         std::cout << "SimpleWorkload::setup()\n";
-        FDBTransaction* trx = nullptr;
-        //fdb_database_create_transaction(db, &trx);
-        //std::cout << "fdb_database_create_transaction()\n";
         done.send(true);
     }
 	virtual void start(FDBDatabase* db, GenericPromise<bool> done) override {
